@@ -1,6 +1,7 @@
 package team_I;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -19,19 +20,32 @@ public class Map extends Canvas implements KeyListener {
 	private TimerTask timerTask;
 	private boolean jump = false;
 	private boolean fall = false;
+	private Block map[][] = new Block[20][30];
+	private User user = new User();
 	
 	public Map() {
 		this.addKeyListener(this);
+		for (int i = 0; i < map.length; i++) {
+			for (int k = 0; k < map[i].length; k++) {
+				Block block = new Block();
+				map[i][k] = block;
+			}
+		}
+		user.setCenter(300, 390);
 	}
 	
 	public void paint(Graphics g) {
 		this.dim = getSize();
 		this.offScreen = createImage(dim.width, dim.height);
 		this.bufferGraphics = this.offScreen.getGraphics();
-		
 		bufferGraphics.clearRect(0, 0, dim.width, dim.height);
-		bufferGraphics.fillRect(0, 430, 1000, 400);
-		bufferGraphics.fillOval(x, y, 30, 30);
+		
+		for (int i = 13; i < map.length; i++) {
+			for (int k = 0; k < map[i].length; k++) {
+				bufferGraphics.fillRect(30 * k, 30 * i, map[i][k].getWidth(), map[i][k].getHeight());
+			}
+		}
+		bufferGraphics.fillOval(user.getCenter().x, user.getUnder().y - 30, user.getWidth(), user.getHeight());
 		g.drawImage(offScreen, 0, 0, this);
 	}
 
@@ -43,6 +57,7 @@ public class Map extends Canvas implements KeyListener {
 		if (e.getKeyCode() == 37) {
 			System.out.println("왼쪽 키 누름");
 			x -= 5;
+			user.setCenter(x, user.getCenter().y);
 		}
 		else if (e.getKeyCode() == 38) {
 			System.out.println("위쪽 키 누름");
@@ -52,6 +67,7 @@ public class Map extends Canvas implements KeyListener {
 		else if (e.getKeyCode() == 39) {
 			System.out.println("오른쪽 키 누름");
 			x += 5;
+			user.setCenter(x, user.getCenter().y);
 		}
 		else if (e.getKeyCode() == 40) {
 			System.out.println("아래쪽 키 누름");
@@ -68,8 +84,9 @@ public class Map extends Canvas implements KeyListener {
 			timerTask = new TimerTask() {
 				public void run() {
 					y -= 5;
+					user.setUnder(y);
 					repaint();
-					if (y <= i - 200) {
+					if (user.getUnder().y <= i - 200) {
 						fall = true;
 						try {
 							Thread.sleep(300);
@@ -94,8 +111,9 @@ public class Map extends Canvas implements KeyListener {
 			timerTask = new TimerTask() {
 				public void run() {
 					y += 5;
+					user.setUnder(y);
 					repaint();
-					if (y >= i + 200) {
+					if (user.getUnder().y >= i + 200) {
 						fall = false;
 						timer.cancel();
 					}
