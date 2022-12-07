@@ -9,9 +9,7 @@ public class User {
 	Point under = new Point();
 	
 	public User() {
-		center.setLocation(0, 0);
-		getUnder();
-		under.setLocation(center.x, center.y+15);
+
 	}
 	
 	public int getWidth() {
@@ -36,5 +34,6 @@ public class User {
 	
 	public void setCenter(int x, int y) {
 		this.center.setLocation(x, y);
+		this.under.setLocation(x, center.y + 15);
 	}
 }

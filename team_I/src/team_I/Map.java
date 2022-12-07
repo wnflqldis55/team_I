@@ -11,8 +11,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Map extends Canvas implements KeyListener {
-	int x = 400;
-	int y = 400;
+	int x = 390;
+	int y = 390;
 	private Graphics bufferGraphics;
 	private Image offScreen;
 	private Dimension dim;
@@ -20,18 +20,32 @@ public class Map extends Canvas implements KeyListener {
 	private TimerTask timerTask;
 	private boolean jump = false;
 	private boolean fall = false;
-	private Block map[][] = new Block[20][30];
+	private int map[][];
 	private User user = new User();
 	
 	public Map() {
 		this.addKeyListener(this);
-		for (int i = 0; i < map.length; i++) {
-			for (int k = 0; k < map[i].length; k++) {
-				Block block = new Block();
-				map[i][k] = block;
-			}
-		}
-		user.setCenter(300, 390);
+		map = new int[][] {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
+		user.setCenter(x, y);
 	}
 	
 	public void paint(Graphics g) {
@@ -40,12 +54,14 @@ public class Map extends Canvas implements KeyListener {
 		this.bufferGraphics = this.offScreen.getGraphics();
 		bufferGraphics.clearRect(0, 0, dim.width, dim.height);
 		
-		for (int i = 13; i < map.length; i++) {
+		for (int i = 0; i < map.length; i++) {
 			for (int k = 0; k < map[i].length; k++) {
-				bufferGraphics.fillRect(30 * k, 30 * i, map[i][k].getWidth(), map[i][k].getHeight());
+				if (map[i][k] == 1) {
+					bufferGraphics.fillRect(30 * k, 30 * i, 30, 30);
+				}
 			}
 		}
-		bufferGraphics.fillOval(user.getCenter().x, user.getUnder().y - 30, user.getWidth(), user.getHeight());
+		bufferGraphics.fillOval(user.getCenter().x, user.getCenter().y - 30, user.getWidth(), user.getHeight());
 		g.drawImage(offScreen, 0, 0, this);
 	}
 
@@ -61,8 +77,10 @@ public class Map extends Canvas implements KeyListener {
 		}
 		else if (e.getKeyCode() == 38) {
 			System.out.println("위쪽 키 누름");
-			jump = true;
-			jump();
+			if (jump != true) {
+				jump = true;
+				jump();
+			}
 		}
 		else if (e.getKeyCode() == 39) {
 			System.out.println("오른쪽 키 누름");
@@ -79,17 +97,17 @@ public class Map extends Canvas implements KeyListener {
 		int i = y;
 		System.out.println("점프");
 		if (jump == true) {
-			jump = false;
 			timer = new Timer();
 			timerTask = new TimerTask() {
 				public void run() {
-					y -= 5;
-					user.setUnder(y);
+					double g = y * 0.0098;
+					y -= g;
+					user.setCenter(user.getCenter().x, y);
 					repaint();
-					if (user.getUnder().y <= i - 200) {
+					if (user.getCenter().y <= i - 200) {
 						fall = true;
 						try {
-							Thread.sleep(300);
+							Thread.sleep(200);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
@@ -98,8 +116,7 @@ public class Map extends Canvas implements KeyListener {
 					fall();
 				}
 			};
-			timer.schedule(timerTask, 0, 30);
-			
+			timer.schedule(timerTask, 0, 10);
 		}
 	}
 	
@@ -110,16 +127,18 @@ public class Map extends Canvas implements KeyListener {
 			timer = new Timer();
 			timerTask = new TimerTask() {
 				public void run() {
-					y += 5;
-					user.setUnder(y);
+					double g = y * 0.0098;
+					y += g;
+					user.setCenter(user.getCenter().x, y);
 					repaint();
-					if (user.getUnder().y >= i + 200) {
+					if (user.getCenter().y >= i + 200) {
+						jump = false;
 						fall = false;
 						timer.cancel();
 					}
 				}
 			};
-			timer.schedule(timerTask, 0, 30);
+			timer.schedule(timerTask, 0, 10);
 		}
 	}
 	
