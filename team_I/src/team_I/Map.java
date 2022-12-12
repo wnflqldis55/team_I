@@ -10,140 +10,430 @@ import java.awt.event.KeyListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JOptionPane;
+
 public class Map extends Canvas implements KeyListener {
-	int x = 50;
-	int y = 420;
-	private Graphics bufferGraphics;
-	private Image offScreen;
-	private Dimension dim;
-	private Timer timer;
-	private TimerTask timerTask;
-	private boolean jump = false;
-	private boolean fall = false;
-	private int map[][];
-	private User user = new User();
+	private static final long serialVersionUID = 1L;
+	private int x = 0; //»≠∏È x
+	private int y = 0; //»≠∏È y
+	private int finalX = 0; //»≠∏È x
+	private int finalY = 0; //»≠∏È y
+	private int pointX = 405; //»≠∏È x
+	private int pointY = 375; //»≠∏È y
+	private boolean savePoint = false;
+	private Graphics bufferGraphics; //¥ı∫Ìπˆ∆€∏µ ¿”Ω√ ±◊∑°«»
+	private Image offScreen; //¥ı∫Ìπˆ∆€∏µ ¿ÃπÃ¡ˆ
+	private Dimension dim; //»≠∏È ªÁ¿Ã¡Ó
+	private boolean jump = false; //∞¯¡ﬂø° ∂∞¿÷¥¬ ªÛ≈¬
+	private boolean fall = false; //∂≥æÓ¡ˆ¥¬ ªÛ≈¬
+	private int map[][]; //∏  πËø≠
+	private User user = new User(); //¿Ø¿˙
+	private boolean left = false; //øﬁ¬  ≈∞
+	private boolean right = false; //ø¿∏•¬  ≈∞
+	private boolean up = false; //¿ß¬  ≈∞
+	private boolean down = false; //æ∆∑°¬  ≈∞
 	
 	public Map() {
-		this.addKeyListener(this);
-		map = new int[][] {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1},
-					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1},
-					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1},
-					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1},
-					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1},
-					   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1}};
-		user.setCenter(x, y);
+		this.addKeyListener(this); //≈∞∫∏µÂ ∏ÆΩ∫≥ 
+		//∏  ª˝º∫
+		map = new int[][] {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					   	   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+					       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 1, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0},
+					       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0},
+					       {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+					       {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+					       {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+					       {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+					       {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+					       {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+					       {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
+		user.setCenter(pointX, pointY); //¿Ø¿˙ ºæ≈Õ ¡ˆ¡§
+		requestFocus(); //≈∞¿Ã∫•∆Æ∏¶ πﬁ¿ª ƒƒ∆˜≥Õ∆Æ∑Œ º≥¡§
+		setFocusable(true); //≈∞ ¿Ã∫•∆Æ øÏº± ¿‘∑¬
 	}
 	
 	public void paint(Graphics g) {
-		this.dim = getSize();
-		this.offScreen = createImage(dim.width, dim.height);
+		processKey(); //≈∞ ¿Ã∫•∆Æ
+		this.dim = getSize(); //Ω∫≈©∏∞ ªÁ¿Ã¡Ó
+		this.offScreen = createImage(dim.width, dim.height); //¥ı∫Ìπˆ∆€∏µ ¡ˆ¡§
 		this.bufferGraphics = this.offScreen.getGraphics();
-		bufferGraphics.clearRect(0, 0, dim.width, dim.height);
 		
-		for (int i = 0; i < map.length; i++) {
+		bufferGraphics.clearRect(0, 0, dim.width, dim.height); //»≠∏È ¡ˆøÏ±‚
+		bufferGraphics.setColor(Color.WHITE);
+		bufferGraphics.fillRect(0, 0, dim.width, dim.height);
+		
+		for (int i = 0; i < map.length; i++) { //∏  πËø≠ø° µ˚∂Û æ€ ª˝º∫
 			for (int k = 0; k < map[i].length; k++) {
-				if (map[i][k] == 1) {
-					bufferGraphics.fillRect(30 * k, 30 * i, 30, 30);
+				if (map[i][k] == 1) { //1¿Ã∏È ∂•
+					bufferGraphics.setColor(Color.BLACK);
+					bufferGraphics.fillRect(30 * k + x, 30 * i + y, 30, 30);
+				}
+				else if (map[i][k] == 2) { //2∏È πÆ
+					bufferGraphics.setColor(Color.BLACK);
+					if (map[i-1][k] != 2) {
+						bufferGraphics.fillOval(30 * k + x, 30 * i + y + 15, 30, 30);
+					}
+					else {
+						bufferGraphics.fillRect(30 * k + x, 30 * i + y, 30, 30);
+					}
+				}
+				else if (map[i][k] == 4) { //4∏È √ ±‚ ¿ßƒ°∑Œ
+					bufferGraphics.setColor(Color.magenta);
+					bufferGraphics.fillRect(30 * k + x, 30 * i + y, 30, 30);
+					
+				}
+				else if (map[i][k] == 5) { //5∏È ∫“
+					bufferGraphics.setColor(Color.RED);
+					bufferGraphics.fillRect(30 * k + x, 30 * i + y, 30, 30);
+				}
+				else if (map[i][k] == 6) { //6¿Ã∏È ºº¿Ã∫Í ∆˜¿Œ∆Æ
+					bufferGraphics.setColor(Color.GREEN);
+					bufferGraphics.fillRect(30 * k + x, 30 * i + y, 30, 30);
 				}
 			}
 		}
-		bufferGraphics.fillOval(user.getCenter().x, user.getCenter().y - 30, user.getWidth(), user.getHeight());
-		g.drawImage(offScreen, 0, 0, this);
+		
+		for (int i = 0; i < map.length; i++) { //¿”Ω√ ±◊∏ÆµÂ
+			for (int k = 0; k < map[i].length; k++) {
+				if ((i + k) % 2 == 0) {
+					bufferGraphics.setColor(Color.BLACK);
+					bufferGraphics.drawRect(30 * k + x, 30 * i + y, 30, 30);
+				}
+			}
+		}
+		
+		bufferGraphics.fillOval(user.getLeft(), user.getTop(), user.getWidth(), user.getHeight()); //¿Ø¿˙ ±◊∏Æ±‚
+		g.drawImage(offScreen, 0, 0, this); //ƒƒ∆˜≥Õ∆Æø° ±◊∏Æ±‚
+		
+		int i = Math.round(user.getCenter().y / 30); //«ˆ¿Á ¿ßƒ°«— ∫Ì∑∞ y
+ 		int k = Math.round((user.getCenter().x - x) / 30); //«ˆ¿Á ¿ßƒ°«— ∫Ì∑∞ x
+ 		System.out.println(i + " " + k);
 	}
 
 	public void keyTyped(KeyEvent e) {
 		
 	}
-
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == 37) {
-			System.out.println("ÏôºÏ™Ω ÌÇ§ ÎàÑÎ¶Ñ");
-			x -= 5;
-			user.setCenter(x, user.getCenter().y);
-		}
-		else if (e.getKeyCode() == 38) {
-			System.out.println("ÏúÑÏ™Ω ÌÇ§ ÎàÑÎ¶Ñ");
-			if (jump != true) {
-				jump = true;
-				jump();
+	
+	private void processKey() { //≈∞ ¿Ã∫•∆Æ «‘ºˆ
+		if(left) { //øﬁ¬ 
+			if (x < 0 && LeftCheck() == false && user.getCenter().x == pointX) {
+				//x∞° 0∫∏¥Ÿ ¿€∞Ì, øﬁ¬ ø° ¿Âæ÷π∞¿Ã æ¯¿∏∏Á ¿Ø¿˙∞° »≠∏È¿« ∞°øÓµ•¿”(µ∆˙∆Æ)
+				x += 5; //»≠∏È¿« x∏¶ ø¿∏•¬ ¿∏∑Œ π–æÓ øﬁ¬ ¿∏∑Œ ∞°∞‘≤˚
+				user.setCenter(user.getCenter().x, user.getCenter().y); //¿Ø¿˙ ¥ŸΩ√ ±◊∏Æ±‚
+			}
+			else if (LeftCheck() == false && x <= 0) { //øﬁ¬ ø° ¿Âæ÷π∞¿Ã æ¯∞Ì x∞° 0∫∏¥Ÿ ¿€¿Ω(»≠∏È¿Ã ∏ ¿« øﬁ¬  ≥°¿œ ∞ÊøÏ)
+				user.setCenter(user.getCenter().x - 5, user.getCenter().y); //¿Ø¿˙∞° øﬁ¬ ¿∏∑Œ øÚ¡˜¿”
+			}
+			else if (LeftCheck() == false && user.getCenter().x != pointX) {
+				//øﬁ¬ ø° ¿Âæ÷π∞¿Ã æ¯∞Ì ¿Ø¿˙∞° ∞°øÓµ•∞° æ∆¥‘(»≠∏È¿Ã ø¿∏•¬  ≥°¿Ã∞Ì ¿Ø¿˙∞° ∞°øÓµ•∞° æ∆¥“ ∞ÊøÏ)
+				user.setCenter(user.getCenter().x - 5, user.getCenter().y); //¿Ø¿˙∏¶ øﬁ¬ ¿∏∑Œ øÚ¡˜¿”
+			}
+			if (fall == false && jump == false && bottomCheck() == false) { //∞¯¡ﬂ¿Ã æ∆¥œ∏Á æ∆∑°¬ ø° ¿Âæ÷π∞¿Ã æ¯¿Ω
+				fall = true; //∂≥æÓ¡ˆ¥¬ ¡ﬂ¿∏∑Œ º≥¡§
+				fall(); //∂≥æÓ¡¸
 			}
 		}
-		else if (e.getKeyCode() == 39) {
-			System.out.println("Ïò§Î•∏Ï™Ω ÌÇ§ ÎàÑÎ¶Ñ");
-			x += 5;
-			user.setCenter(x, user.getCenter().y);
+		
+		if(right) { //ø¿∏•¬ 
+			if ((-1 * map[1].length * 30) < x - 800 && RightCheck() == false && user.getCenter().x == pointX) {
+				//x-800(»≠∏È≈©±‚)¿Ã ∏ ¿« ≈©±‚¿« ¿Ωºˆ∫∏¥Ÿ ¿€∞Ì ø¿∏•¬ ø° ¿Âæ÷π∞¿Ã æ¯¿∏∏Á ¿Ø¿˙∞° ∞°øÓµ•¿”(µ∆˙∆Æ)
+				x -= 5; //»≠∏È¿« x∏¶ øﬁ¬ ¿∏∑Œ π–æÓ ø¿∏•¬ ¿∏∑Œ ∞°∞‘≤˚
+				user.setCenter(user.getCenter().x, user.getCenter().y); //¿Ø¿˙ ¥ŸΩ√ ±◊∏Æ±‚
+			}
+			else if (RightCheck() == false &&  map[1].length * 30 > x - 800) {
+				//ø¿∏•¬ ø° ¿Âæ÷π∞¿Ã æ¯∞Ì x-800(»≠∏È≈©±‚)¿Ã ∏ ¿« ∞°∑Œ∫∏¥Ÿ ¿€¿Ω(»≠∏È¿Ã ∏ ¿« ø¿∏•¬  ≥°¿œ ∞ÊøÏ)
+				user.setCenter(user.getCenter().x + 5, user.getCenter().y); //¿Ø¿˙∞° ø¿∏•¬ ¿∏∑Œ øÚ¡˜¿”
+			}
+			else if (RightCheck() == false && user.getCenter().x != pointX) {
+				//ø¿∏•¬ ø° ¿Âæ÷π∞¿Ã æ¯¿∏∏Á ¿Ø¿˙∞° »≠∏È¿« ∞°øÓµ•∞° æ∆¥‘(»≠∏È¿Ã øﬁ¬  ≥°¿Ã∞Ì ¿Ø¿˙∞° ∞°øÓµ•∞° æ∆¥“ ∞ÊøÏ)
+				user.setCenter(user.getCenter().x + 5, user.getCenter().y); //¿Ø¿˙∞° ø¿∏•¬ ¿∏∑Œ øÚ¡˜¿”
+			}
+			if (fall == false && jump == false && bottomCheck() == false) { //∞¯¡ﬂ¿Ã æ∆¥œ∏Á æ∆∑°¬ ø° ¿Âæ÷π∞¿Ã æ¯¿Ω
+				fall = true; //∂≥æÓ¡ˆ¥¬ ¡ﬂ¿∏∑Œ º≥¡§
+				fall(); //∂≥æÓ¡¸
+			}
 		}
-		else if (e.getKeyCode() == 40) {
-			System.out.println("ÏïÑÎûòÏ™Ω ÌÇ§ ÎàÑÎ¶Ñ");
+		
+		if(up) { //¿ß¬ 
+			if (jump == false) { //∞¯¡ﬂ¿Ã æ∆¥“ ∞ÊøÏ
+				jump = true; //∞¯¡ﬂ¿Œ ªÛ≈¬
+				jump(); //¡°«¡
+			}
 		}
-		repaint();
+		
+		if(down) { //æ∆∑°¬ 
+			
+		}
 	}
 	
-	public void jump() {
-		int i = y;
-		System.out.println("Ï†êÌîÑ");
-		if (jump == true) {
-			timer = new Timer();
-			timerTask = new TimerTask() {
+	public void keyPressed(KeyEvent e) { //≈∞∏¶ ¥≠∑∂¿ª ∂ß
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) { //øﬁ¬  ≈∞∏È
+			System.out.println("øﬁ¬  ≈∞ ¥©∏ß"); //√‚∑¬
+			left = true; //øﬁ¬  true
+		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_UP) { //¿ß¬  ≈∞∏È
+			System.out.println("¿ß¬  ≈∞ ¥©∏ß"); //√‚∑¬
+			up = true; //¿ß¬  true
+		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) { //ø¿∏•¬  ≈∞∏È
+			System.out.println("ø¿∏•¬  ≈∞ ¥©∏ß"); //√‚∑¬
+			right = true; //ø¿∏•¬  true
+		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_DOWN) { //æ∆∑°¬  ≈∞∏È
+			System.out.println("æ∆∑°¬  ≈∞ ¥©∏ß"); //√‚∑¬
+			down = true; //æ∆∑°¬  true
+		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) { //Ω∫∆‰¿ÃΩ∫πŸ∏È
+			if (map[user.getCenter().y / 30][(user.getCenter().x - x) / 30] == 2) { //¿ßƒ°∞° πÆ¿œ ∞ÊøÏ
+				System.out.println("clear"); //√‚∑¬
+				this.clear(); //≈¨∏ÆæÓ «‘ºˆ »£√‚
+			} else if (map[user.getCenter().y / 30][(user.getCenter().x - x) / 30] == 6) { //¿ßƒ°∞° πÆ¿œ ∞ÊøÏ
+				System.out.println("save"); //√‚∑¬
+				this.save(); //≈¨∏ÆæÓ «‘ºˆ »£√‚
+			}
+		}
+		repaint(); //¥ŸΩ√±◊∏Æ±‚
+	}
+	
+	public void jump() { //¡°«¡
+		int userY = user.getBottom(); //¿Ø¿˙¿« æ∆∑° ¡¬«•
+		System.out.println("¡°«¡"); //√‚∑¬
+		
+		if (jump == true) { //∞¯¡ﬂ¿œ ∞ÊøÏ
+			final Timer timer = new Timer(); //≈∏¿Ã∏” ∏∏µÈ±‚
+			TimerTask timerTask = new TimerTask() {
 				public void run() {
-					double g = y * 0.0098;
-					y -= g;
-					user.setCenter(user.getCenter().x, y);
-					repaint();
-					if (user.getCenter().y <= i - 200) {
-						fall = true;
+					user.setCenter(user.getCenter().x, (int)(user.getCenter().y - 5)); //5pxæø ¿ß∑Œ ø√∂Û∞®
+					repaint(); //¥ŸΩ√±◊∏Æ±‚
+					if (TopCheck()) { //¿ß¬ ø° ¿Âæ÷π∞¿Ã ¿÷¿ª ∞ÊøÏ
 						try {
-							Thread.sleep(200);
+							System.out.println("√÷∞Ì¡°"); //√‚∑¬
+							repaint(); //¥ŸΩ√±◊∏Æ±‚
+							Thread.sleep(500); //0.5√  ∏ÿ√„
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						timer.cancel();
+						fall = true; //∂≥æÓ¡ˆ¥¬ ¡ﬂ¿∏∑Œ º≥¡§
+						timer.cancel(); //≈∏¿Ã∏” √Îº“
+					} else if (user.getCenter().y <= userY - 100) { //√ ±‚ ¿ßƒ°ø°º≠ 100 ¿ß∑Œ ø√∂Û∞¨¿ª ∞ÊøÏ
+						try {
+							System.out.println("√÷∞Ì¡°"); //√‚∑¬
+							repaint(); //¥ŸΩ√±◊∏Æ±‚
+							Thread.sleep(500); //0.5√  ∏ÿ√„
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						fall = true; //∂≥æÓ¡ˆ¥¬ ¡ﬂ¿∏∑Œ º≥¡§
+						timer.cancel(); //≈∏¿Ã∏Á √Îº“
 					}
-					fall();
+					fall(); //∂≥æÓ¡ˆ¥¬ «‘ºˆ »£√‚
 				}
 			};
-			timer.schedule(timerTask, 0, 10);
+			timer.schedule(timerTask, 0, 30);
 		}
 	}
 	
-	public void fall() {
-		int i = y;
-		System.out.println("Îñ®Ïñ¥Ïßê");
-		if (fall == true) {
-			timer = new Timer();
-			timerTask = new TimerTask() {
-				public void run() {
-					double g = y * 0.0098;
-					y += g;
-					user.setCenter(user.getCenter().x, y);
-					repaint();
-					if (user.getCenter().y >= i + 200) {
-						jump = false;
-						fall = false;
-						timer.cancel();
-					}
-				}
-			};
-			timer.schedule(timerTask, 0, 10);
-		}
-	}
-	
-	public void keyReleased(KeyEvent e) {
+	public void fall() { //∂≥æÓ¡¸
+		System.out.println("∂≥æÓ¡¸");
 		
+		if (fall == true) { //∂≥æÓ¡ˆ¥¬ ¡ﬂ¿Ã∏È
+			final Timer timer = new Timer(); //≈∏¿Ã∏” ª˝º∫
+			TimerTask timerTask = new TimerTask() {
+				public void run() {
+					user.setCenter(user.getCenter().x, (int)(user.getCenter().y + 5)); //5pxæø ∂≥æÓ¡¸
+					repaint(); //¥ŸΩ√±◊∏Æ±‚
+					if (bottomCheck()) { //æ∆∑°¬ ø° ¿Âæ÷π∞¿Ã ¿÷¿∏∏È
+						timer.cancel(); //≈∏¿Ã∏” √Îº“
+						System.out.println("bottom: "+bottomCheck()); //√‚∑¬
+						fall = false; //∂≥æÓ¡ˆ¥¬ ¡ﬂ¿Ã æ∆¥‘
+					}
+				}
+			};
+			timer.schedule(timerTask, 0, 30);
+		}
+	}
+	
+	public boolean LeftCheck() { //øﬁ¬  √Êµπ √º≈©
+		int i = Math.round(user.getCenter().y / 30); //«ˆ¿Á ¿ßƒ°«— ∫Ì∑∞ y
+ 		int k = Math.round((user.getLeft() - x) / 30); //«ˆ¿Á ¿ßƒ°«— ∫Ì∑∞ x
+ 		
+ 		if (k > 0) {
+ 			if (i < 20 && i >= 0) {
+	 			if (map[i][k] != 0 && map[i][k] != 2 && map[i][k] != 6)  { //¿Âæ÷π∞¿Ã ¿÷¿ª∂ß
+	 				reboot(i, k);
+	 				fire(i, k);
+	 				save();
+					return true; //√Êµπ
+				}
+	 		}
+ 		}
+ 		else if (k <= 0){
+ 			if (user.getLeft() <= 0) { //¿Ø¿˙¿« øﬁ¬ ¿Ã ¿Âæ÷π∞ø° ¥Í¿∏∏È
+				return true; //√Êµπ
+ 			}
+ 		}
+ 		
+		return false; //√Êµπæ»«‘
+	}
+	
+	public boolean RightCheck() { //ø¿∏•¬  √Êµπ √º≈©
+		int i = Math.round(user.getCenter().y / 30); //«ˆ¿Á ¿ßƒ°«— ∫Ì∑∞ y
+ 		int k = Math.round((user.getRight() - x) / 30); //«ˆ¿Á ¿ßƒ°«— ∫Ì∑∞ x
+ 		
+ 		if (map[1].length > k) {
+ 			if (i < 20 && i >= 0) {
+ 				if (map[i][k] != 0 && map[i][k] != 2 && map[i][k] != 6) { //¿Âæ÷π∞¿Ã ¿÷¿ª∂ß
+ 					reboot(i, k);
+ 					fire(i, k);
+ 					save();
+					return true; //√Êµπ
+		 		}
+	 		} 
+ 		}
+ 		else if (map[1].length <= k) {
+			return true; //√Êµπ
+ 		}
+ 		
+		return false; //√Êµπæ»«‘
+	} 
+	
+	public boolean TopCheck() { //¿ß¬  √Êµπ √º≈©
+		int i = Math.round(user.getTop() / 30); //«ˆ¿Á ¿ßƒ°«— ∫Ì∑∞ y
+ 		int k = Math.round((user.getCenter().x - x) / 30); //«ˆ¿Á ¿ßƒ°«— ∫Ì∑∞ x
+ 		
+		if (i < 20 && i >= 0) { //»≠∏È æ»¿Ã∏È
+			if (map[i][k] != 0 && map[i][k] != 2 && map[i][k] != 6)  { //¿Âæ÷π∞¿Ã ¿÷¿ª ∂ß
+				reboot(i, k);
+				fire(i, k);
+				save();
+				fall = true; //∂≥æÓ¡ˆ¥¬ ªÛ≈¬
+				jump = true; //∞¯¡ﬂ ªÛ≈¬
+				return true; //√Êµπ
+			}
+		}
+		else {
+			return true;
+		}
+		
+		return false; //√Êµπæ»«‘
+	}
+	
+	public boolean bottomCheck() { //æ∆∑°¬  √Êµπ √º≈©
+		int i = Math.round(user.getBottom() / 30); //«ˆ¿Á ¿ßƒ°«— ∫Ì∑∞ y
+ 		int k = Math.round((user.getCenter().x - x) / 30); //«ˆ¿Á ¿ßƒ°«— ∫Ì∑∞ x
+ 		
+		if (i < 20 && i >= 0) { //»≠∏È æ»¿Ã∏È
+			if (map[i][k] != 0 && map[i][k] != 2 && map[i][k] != 6)  { //¿Ø¿˙¿« æ∆∑°¬ ø° ¿Âæ÷π∞¿Ã ¿÷¿ª ∂ß
+				reboot(i, k);
+				fire(i, k);
+				save();
+				fall = false; //∂≥æÓ¡ˆ¥¬ ªÛ≈¬ æ∆¥‘
+				jump = false; //∞¯¡ﬂ æ∆¥‘
+				return true; //√Êµπ
+			}
+		}
+		else if (i == 20) {
+			over();
+		}
+		
+		return false;  //√Êµπæ»«‘
+	}
+	
+	public void keyReleased(KeyEvent e) { //≈∞∏¶ ∂¬¿ª ∂ß
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			left = false;
+		}
+			
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
+			up = false;
+		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			right = false;
+		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			down = false;
+		}
+	}
+	
+	public void clear() { //≈¨∏ÆæÓ Ω√
+		String[] answer = {"Ω∫≈◊¿Ã¡ˆ∑Œ", "¥ŸΩ√«œ±‚"}; //¥Ÿ¿ÃæÛ∑Œ±◊ πˆ∆∞ º≥¡§
+		int result = JOptionPane.showOptionDialog(this, " * clear * ", "clear" //≥ªøÎ, ≈∏¿Ã∆≤ º≥¡§
+				,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, answer, null );
+		
+		if (result == 0) //Ω∫≈◊¿Ã¡ˆ∑Œ º±≈√ Ω√
+			new Start(); //Ω∫≈◊¿Ã¡ˆ º±≈√√¢¿∏∑Œ
+		else //¥ŸΩ√«œ±‚ º±≈√ Ω√
+			new Stage(); //ªı Ω∫≈◊¿Ã¡ˆ∑Œ
+	}
+	
+	public void over() { //≈¨∏ÆæÓ Ω√
+		if (savePoint) {
+			x = finalX;
+			y = finalY;
+			user.setCenter(pointX, pointY);
+		}
+		else {
+			String[] answer = {"Ω∫≈◊¿Ã¡ˆ∑Œ", "¥ŸΩ√«œ±‚"}; //¥Ÿ¿ÃæÛ∑Œ±◊ πˆ∆∞ º≥¡§
+			int result = JOptionPane.showOptionDialog(this, " ~ game over ~ ", "game over" //≥ªøÎ, ≈∏¿Ã∆≤ º≥¡§
+					,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, answer, null );
+			
+			if (result == 0) //Ω∫≈◊¿Ã¡ˆ∑Œ º±≈√ Ω√
+				new Start(); //Ω∫≈◊¿Ã¡ˆ º±≈√√¢¿∏∑Œ
+			else if (result == 1) //¥ŸΩ√«œ±‚ º±≈√ Ω√
+				new Stage(); //ªı Ω∫≈◊¿Ã¡ˆ∑Œ
+			else
+				new Start();
+			
+			x = 0;
+			y = 0;
+			pointX = 405;
+			pointY = 375;
+			user.setCenter(pointX, pointY);
+		}
+	}
+	
+	public void reboot(int i, int k) {
+		if (map[i][k] == 4) {
+			x = 0;
+			y = 0;
+			user.setCenter(pointX, pointY);
+			System.out.println("√≥¿Ω¿∏∑Œ");
+		}
+	}
+	
+	public void save() {
+		int i = Math.round(user.getCenter().y / 30); //«ˆ¿Á ¿ßƒ°«— ∫Ì∑∞ y
+ 		int k = Math.round((user.getCenter().x - x) / 30); //«ˆ¿Á ¿ßƒ°«— ∫Ì∑∞ x
+ 		
+		if (map[i][k] == 6) {
+			finalX = x;
+			finalY = y;
+			pointX = user.getCenter().x - 15;
+			pointY = user.getCenter().y - 15;
+			this.savePoint = true;
+			System.out.println("¿˙¿Â");
+		}
+	}
+	
+	public void fire(int i, int k) {
+		if (map[i][k] == 5) {
+			over();
+		}
 	}
 	
 	public void update(Graphics g) {

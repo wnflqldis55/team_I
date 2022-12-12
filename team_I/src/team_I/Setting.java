@@ -1,36 +1,39 @@
 package team_I;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 public class Setting extends JFrame {
-	private JPanel contentPane;
-	
-	public Setting() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(800, 600);
-		this.setVisible(true);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+	private static final long serialVersionUID = 1L;
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JButton back = new JButton("\uB4A4\uB85C\uAC00\uAE30");
-		back.addActionListener(new ActionListener() {
+	public Setting() {
+		initial();
+
+		add(returnButton());
+	}
+	
+	private void initial() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("ESCAPE BALL"); //타이틀 지정
+		setSize(800, 600);
+		setLocationRelativeTo(null); //화면 가운데로
+		setResizable(false);
+		setLayout(null);
+	}
+	
+	private JButton returnButton() {
+		JButton exit = new JButton("돌아가기");
+		exit.addActionListener(new ActionListener() { //리스너 등록
 			public void actionPerformed(ActionEvent e) {
-				new MainFrame();
+				new Start(); //프로그램 종료
 				setVisible(false);
 			}
 		});
-		back.setBounds(12, 10, 91, 23);
-		contentPane.add(back);
+		exit.setBounds(12, 10, 91, 23); //위치지정
+		
+		return exit;
 	}
-
 }
