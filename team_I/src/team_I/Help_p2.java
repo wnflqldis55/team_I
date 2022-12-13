@@ -1,30 +1,30 @@
 package team_I;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextPane;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Help extends JFrame {
+public class Help_p2 extends JFrame {
 	private static final long serialVersionUID = 1L;
+	Help_sub help_sub = new Help_sub();
 
-	public Help() {
+	public Help_p2() {
 		initial();
 		
+		prevButton();
+		nextButton();
 		add(returnButton()); //돌아가기 버튼
 		add(title()); //타이틀
-		add(helpImage());
-		add(backGround());
 		
-		setResizable(false);
+		help_sub.setBounds(0, 0, 800, 600);
+		add(help_sub);
+		
+		setVisible(true);
 	}
 	
 	private void initial() {
@@ -36,11 +36,39 @@ public class Help extends JFrame {
 		setLayout(null);
 	}
 	
+	private JButton prevButton() {
+		JButton prev = new JButton("<");
+		prev.addActionListener(new ActionListener() { //리스너 등록
+			public void actionPerformed(ActionEvent e) {
+				new Help_p1(); //이전 페이지
+				setVisible(false);
+			}
+		});
+		prev.setBounds(680, 513, 41, 40);
+		add(prev);
+		
+		return prev;
+	}
+	
+	private JButton nextButton() {
+		JButton next = new JButton(">");
+		next.addActionListener(new ActionListener() { //리스너 등록
+			public void actionPerformed(ActionEvent e) {
+				new Help_p3(); //다음페이지
+				setVisible(false);
+			}
+		});
+		next.setBounds(733, 513, 41, 40);
+		add(next);
+		
+		return next;
+	}
+	
 	private JButton returnButton() {
 		JButton exit = new JButton("돌아가기");
 		exit.addActionListener(new ActionListener() { //리스너 등록
 			public void actionPerformed(ActionEvent e) {
-				new Start(); //프로그램 종료
+				new Home(); //홈으로
 				setVisible(false);
 			}
 		});
@@ -59,24 +87,5 @@ public class Help extends JFrame {
 		title.setEnabled(false);
 		
 		return title;
-	}
-	
-	private JLabel helpImage() {
-		ImageIcon im = new ImageIcon("src/Image/help.png");
-		Image image = im.getImage();
-		Image imageB = image.getScaledInstance(800, 300, java.awt.Image.SCALE_SMOOTH);
-		
-		JLabel helpImage = new JLabel(new ImageIcon(imageB));
-		helpImage.setBounds(0, 300, 800, 300);
-		
-		return helpImage;
-	}
-	
-	private JPanel backGround() {
-		JPanel background = new JPanel();
-		background.setBounds(0, 0, 800, 600);
-		background.setBackground(Color.WHITE);
-		
-		return background;
 	}
 }

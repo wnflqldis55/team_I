@@ -7,8 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 public class Stage extends JFrame {
-	Map map = new Map();
 	private static final long serialVersionUID = 1L;
+	Map map = new Map();
 
 	public Stage() {
 		initial();
@@ -34,7 +34,7 @@ public class Stage extends JFrame {
 		JButton exit = new JButton("돌아가기");
 		exit.addActionListener(new ActionListener() { //리스너 등록
 			public void actionPerformed(ActionEvent e) {
-				new Start(); //프로그램 종료
+				new Start(); //스테이지 선택으로
 				setVisible(false);
 			}
 		});

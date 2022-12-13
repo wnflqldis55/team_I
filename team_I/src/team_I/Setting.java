@@ -13,6 +13,8 @@ public class Setting extends JFrame {
 		initial();
 
 		add(returnButton());
+		
+		setVisible(true);
 	}
 	
 	private void initial() {
@@ -28,7 +30,7 @@ public class Setting extends JFrame {
 		JButton exit = new JButton("돌아가기");
 		exit.addActionListener(new ActionListener() { //리스너 등록
 			public void actionPerformed(ActionEvent e) {
-				new Start(); //프로그램 종료
+				new Home(); //프로그램 종료
 				setVisible(false);
 			}
 		});

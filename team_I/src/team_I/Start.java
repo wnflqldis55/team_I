@@ -43,7 +43,7 @@ public class Start extends JFrame {
 		JButton back = new JButton("돌아가기");
 		back.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new MainFrame();
+				new Home();
 				setVisible(false);
 			}
 		});
