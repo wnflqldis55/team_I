@@ -1,5 +1,4 @@
 package team_I;
-
 import java.awt.Point;
 
 public class User {

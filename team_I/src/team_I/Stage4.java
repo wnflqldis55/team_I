@@ -1,21 +1,19 @@
 package team_I;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
-public class Help_p3 extends JFrame {
+public class Stage4 extends JFrame {
 	private static final long serialVersionUID = 1L;
-
-	public Help_p3() {
+	private Map map = new Map();
+	private Screen screen = new Screen(map.getMap4());
+	
+	public Stage4() {
 		this.initial(); //프레임 설정
-		
-		this.add(prevButton()); //이전 버튼
+	
 		this.add(returnButton()); //돌아가기 버튼
 		this.add(backGroundImage()); //캔버스 추가
 		
@@ -31,30 +29,10 @@ public class Help_p3 extends JFrame {
 		this.setLayout(null); //앱솔루트 레이아웃
 	}
 	
-	private JLabel backGroundImage() { //배경 이미지
-		JLabel background = //배경 이미지 라벨에 추가
-                    new JLabel(new ImageIcon("resources/help_p1.png")); //임시
-		background.setBounds(0, 0, 800, 600); //라벨 위치 지정
+	private Screen backGroundImage() { //배경 이미지
+		screen.setBounds(0, 0, 800, 600); //캔버스 위치 지정
 		
-		return background; //라벨 리턴
-	}
-	
-	private JButton prevButton() {
-		ImageIcon img = new ImageIcon("resources/prevButton.png"); //이미지 생성
-		
-		JButton prev = new JButton(img); //버튼 생성
-		prev.addActionListener(new ActionListener() { //리스너 등록
-			public void actionPerformed(ActionEvent e) {
-				new Help_p2(); //다음페이지
-				setVisible(false); //현재 프레임 안보이게
-			}
-		});
-		LineBorder boader = new LineBorder(new Color(75, 75, 75));
-		prev.setBorder(boader);
-		prev.setPreferredSize(new Dimension(32, 32)); //버튼 크기 지정
-		prev.setBounds(710, 554, 32, 32); //위치 지정W
-		
-		return prev; //버튼 리턴
+		return screen; //라벨 리턴
 	}
 	
 	private JButton returnButton() {
