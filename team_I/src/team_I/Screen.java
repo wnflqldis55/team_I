@@ -69,16 +69,16 @@ public class Screen extends Canvas implements KeyListener {
 	
 	private void processKey() { //키 이벤트 함수
 		if(left) { //왼쪽
+			//x가 0보다 작고, 왼쪽에 장애물이 없으며 유저가 화면의 가운데임(디폴트)
 			if (x < 0 && LeftCheck() == false && user.getCenter().x == 405) {
-				//x가 0보다 작고, 왼쪽에 장애물이 없으며 유저가 화면의 가운데임(디폴트)
 				x += 5; //화면의 x를 오른쪽으로 밀어 왼쪽으로 가게끔
 				user.setCenter(user.getCenter().x, user.getCenter().y); //유저 다시 그리기
 			}
 			else if (LeftCheck() == false && x <= 0) { //왼쪽에 장애물이 없고 x가 0보다 작음(화면이 맵의 왼쪽 끝일 경우)
 				user.setCenter(user.getCenter().x - 5, user.getCenter().y); //유저가 왼쪽으로 움직임
 			}
+			//왼쪽에 장애물이 없고 유저가 가운데가 아님(화면이 오른쪽 끝이고 유저가 가운데가 아닐 경우)
 			else if (LeftCheck() == false && user.getCenter().x != 405) {
-				//왼쪽에 장애물이 없고 유저가 가운데가 아님(화면이 오른쪽 끝이고 유저가 가운데가 아닐 경우)
 				user.setCenter(user.getCenter().x - 5, user.getCenter().y); //유저를 왼쪽으로 움직임
 			}
 			if (fall == false && jump == false && bottomCheck() == false) { //공중이 아니며 아래쪽에 장애물이 없음
@@ -88,8 +88,8 @@ public class Screen extends Canvas implements KeyListener {
 		}
 		
 		if(right) { //오른쪽
+			//x-800(화면크기)이 맵의 크기의 음수보다 작고 오른쪽에 장애물이 없으며 유저가 가운데임(디폴트)
 			if ((-1 * map[1].length * 30) < x - 810 && RightCheck() == false && user.getCenter().x == 405) {
-				//x-800(화면크기)이 맵의 크기의 음수보다 작고 오른쪽에 장애물이 없으며 유저가 가운데임(디폴트)
 				x -= 5; //화면의 x를 왼쪽으로 밀어 오른쪽으로 가게끔
 				user.setCenter(user.getCenter().x, user.getCenter().y); //유저 다시 그리기
 			}
@@ -175,7 +175,8 @@ public class Screen extends Canvas implements KeyListener {
 						}
 						fall = true; //떨어지는 중으로 설정
 						timer.cancel(); //타이머 취소
-					} else if (user.getCenter().y <= userY - 100) { //초기 위치에서 100 위로 올라갔을 경우
+					}
+					else if (user.getCenter().y <= userY - 100) { //초기 위치에서 100 위로 올라갔을 경우
 						try {
 							System.out.println("최고점"); //출력
 							repaint(); //다시그리기
@@ -277,7 +278,7 @@ public class Screen extends Canvas implements KeyListener {
  		int k = Math.round((user.getCenter().x - x) / 30); //현재 위치한 블럭 x
  		
 		if (i < 20 && i >= 0) { //화면 안이면
-			if (map[i][k] != 0 && map[i][k] != 2 && map[i][k] != 6 && map[i][k] != 7)  { //장애물이 있을 때
+			if (map[i][k] != 0 && map[i][k] != 2 && map[i][k] != 6 && map[i][k] != 7) { //장애물이 있을 때
 				reboot(i, k);
 				fire(i, k);
 				move(i, k);
@@ -334,9 +335,13 @@ public class Screen extends Canvas implements KeyListener {
 	
 	public void clear() { //클리어 시
 		System.out.println("clear"); //출력
+		left = false;
+		right = false;
+		up = false;
+		down = false;
 		String[] answer = {"확인", "다시하기"}; //다이얼로그 버튼 설정
-		int result = JOptionPane.showOptionDialog(this, " * clear * ", "clear" //내용, 타이틀 설정
-				,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, answer, null );
+		int result = JOptionPane.showOptionDialog(this, " * clear * ", "clear", JOptionPane.YES_NO_CANCEL_OPTION,
+			JOptionPane.INFORMATION_MESSAGE, null, answer, null ); //내용, 타이틀 설정
 		
 		if (result == 1) { //다시하기 선택 시
 			x = 0;
@@ -353,15 +358,20 @@ public class Screen extends Canvas implements KeyListener {
 	
 	public void over() { //게임 오버 시
 		System.out.println("game over"); //출력
+		left = false;
+		right = false;
+		up = false;
+		down = false;
 		if (savePoint) {
 			String[] answer = {"예", "처음부터"}; //다이얼로그 버튼 설정
-			int choice = JOptionPane.showOptionDialog(this, " 저장된 위치에서 시작하시겠습니까? ", "game over" //내용, 타이틀 설정
-					,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, answer, null );
+			int choice = JOptionPane.showOptionDialog(this, " 저장된 위치에서 시작하시겠습니까? ", "game over",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, answer, null ); //내용, 타이틀 설정
 			if (choice == 0) {
 				x = finalX;
 				y = finalY;
 				user.setCenter(pointX, pointY);
-			} else {
+			}
+			else {
 				int index[] = find(7);
 				for (int num = 0; num < index.length; num += 2) {
 					if (index[num] == 0 && index[num + 1] == 0) {
@@ -380,8 +390,8 @@ public class Screen extends Canvas implements KeyListener {
 		}
 		else {
 			String[] answer = {"다시하기"}; //다이얼로그 버튼 설정
-			JOptionPane.showOptionDialog(this, " ~ game over ~ ", "game over" //내용, 타이틀 설정
-					,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, answer, null );
+			JOptionPane.showOptionDialog(this, " ~ game over ~ ", "game over", JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.INFORMATION_MESSAGE, null, answer, null ); //내용, 타이틀 설정
 			x = 0;
 			y = 0;
 			finalX = 0;
@@ -445,7 +455,8 @@ public class Screen extends Canvas implements KeyListener {
 					x = (a - 13) * 30 * -1;
 					user.setCenter(405, b * 30 + 15);
 				}
-			} else {
+			}
+			else {
 				move(i, k);
 			}
 		}

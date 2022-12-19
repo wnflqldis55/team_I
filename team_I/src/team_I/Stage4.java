@@ -36,12 +36,12 @@ public class Stage4 extends JFrame {
 	}
 	
 	private JButton returnButton() {
-		ImageIcon img = new ImageIcon("resources/returnButton.png"); //이미지 생성
+		ImageIcon img = new ImageIcon(getClass().getClassLoader().getResource("returnButton.png")); //이미지 생성
 		
 		JButton returnBotton = new JButton(img); //이미지가 들어간 버튼 생성
 		returnBotton.addActionListener(new ActionListener() { //리스너 등록
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose(); //현재 프레임 안보이게
 			}
 		});
 		returnBotton.setBorderPainted(false); //버튼 테두리 설정해제

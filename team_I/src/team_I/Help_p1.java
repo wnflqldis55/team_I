@@ -33,20 +33,20 @@ public class Help_p1 extends JFrame {
 	
 	private JLabel backGroundImage() { //배경 이미지
 		JLabel background = //배경 이미지 라벨에 추가
-                    new JLabel(new ImageIcon("resources/help_p1.png"));
+                    new JLabel(new ImageIcon(getClass().getClassLoader().getResource("help_p1.png")));
 		background.setBounds(0, 0, 800, 600); //라벨 위치 지정
 		
 		return background; //라벨 리턴
 	}
 	
 	private JButton nextButton() {
-		ImageIcon img = new ImageIcon("resources/nextButton.png"); //이미지 생성
+		ImageIcon img = new ImageIcon(getClass().getClassLoader().getResource("nextButton.png")); //이미지 생성
 		
 		JButton next = new JButton(img); //버튼 생성
 		next.addActionListener(new ActionListener() { //리스너 등록
 			public void actionPerformed(ActionEvent e) {
 				new Help_p2(); //다음페이지
-				setVisible(false); //현재 프레임 안보이게
+				dispose(); //현재 프레임 안보이게
 			}
 		});
 		LineBorder boader = new LineBorder(new Color(75, 75, 75));
@@ -58,12 +58,12 @@ public class Help_p1 extends JFrame {
 	}
 	
 	private JButton returnButton() {
-		ImageIcon img = new ImageIcon("resources/returnButton.png"); //이미지 생성
+		ImageIcon img = new ImageIcon(getClass().getClassLoader().getResource("returnButton.png")); //이미지 생성
 		
 		JButton returnBotton = new JButton(img); //이미지가 들어간 버튼 생성
 		returnBotton.addActionListener(new ActionListener() { //리스너 등록
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose(); //현재 프레임 안보이게
 			}
 		});
 		returnBotton.setBorderPainted(false); //버튼 테두리 설정해제

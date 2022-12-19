@@ -30,7 +30,8 @@ public class Help_sub extends Canvas implements KeyListener {
 	public Help_sub() {
 		this.addKeyListener(this); //키보드 리스너
 		//맵 생성
-		map = new int[][] {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		map = new int[][]
+		   {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -68,8 +69,7 @@ public class Help_sub extends Canvas implements KeyListener {
 		drawMap(); //맵 그리기
 
 		bufferGraphics.setColor(new Color(75, 75, 75));
-		bufferGraphics.fillOval(user.getLeft(), user.getTop(), user.getWidth(), 
-                    user.getHeight()); //유저 그리기
+		bufferGraphics.fillOval(user.getLeft(), user.getTop(), user.getWidth(), user.getHeight()); //유저 그리기
 		g.drawImage(offScreen, 0, 0, this); //컴포넌트에 그리기
 		
 		int i = Math.round(user.getCenter().y / 30); //현재 위치한 블럭 y
@@ -83,12 +83,12 @@ public class Help_sub extends Canvas implements KeyListener {
 	
 	private void processKey() { //키 이벤트 함수
 		if(left) { //왼쪽
-                        //왼쪽에 장애물이 없고 x가 0보다 작음(화면이 맵의 왼쪽 끝일 경우)
+            //왼쪽에 장애물이 없고 x가 0보다 작음(화면이 맵의 왼쪽 끝일 경우)
 			if (LeftCheck() == false && user.getLeft() > 0) {
-                                //유저가 왼쪽으로 움직임
+                //유저가 왼쪽으로 움직임
 				user.setCenter(user.getCenter().x - 5, user.getCenter().y);
 			}
-                        //공중이 아니며 아래쪽에 장애물이 없음
+            //공중이 아니며 아래쪽에 장애물이 없음
 			if (fall == false && jump == false && bottomCheck() == false) {
 				fall = true; //떨어지는 중으로 설정
 				fall(); //떨어짐
@@ -98,10 +98,10 @@ public class Help_sub extends Canvas implements KeyListener {
 		if(right) { //오른쪽
             //오른쪽에 장애물이 없고 x-800(화면크기)이 맵의 가로보다작음(화면이 맵의 오른쪽 끝일 경우)
 			if (RightCheck() == false && user.getRight() < 800 - 15) {
-			        //유저가 오른쪽으로 움직임
+			    //유저가 오른쪽으로 움직임
 				user.setCenter(user.getCenter().x + 5, user.getCenter().y); 
 			}
-                        //공중이 아니며 아래쪽에 장애물이 없음
+            //공중이 아니며 아래쪽에 장애물이 없음
 			if (fall == false && jump == false && bottomCheck() == false) {
 				fall = true; //떨어지는 중으로 설정
 				fall(); //떨어짐
@@ -142,12 +142,12 @@ public class Help_sub extends Canvas implements KeyListener {
 		}
 		
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) { //스페이스바면
-                        //위치가 문일 경우
+            //위치가 문일 경우
 			if (map[user.getCenter().y / 30][(user.getCenter().x) / 30] == 2) {
 				this.clear(); //클리어 함수 호출
 			}
-                        //위치가 세이브 포인트일 경우
-                        else if (map[user.getCenter().y / 30][(user.getCenter().x) / 30] == 6) { 
+            //위치가 세이브 포인트일 경우
+            else if (map[user.getCenter().y / 30][(user.getCenter().x) / 30] == 6) { 
 				this.save(); //저장 함수 호출
 			}
 		}
@@ -161,8 +161,7 @@ public class Help_sub extends Canvas implements KeyListener {
 			final Timer timer = new Timer(); //타이머 만들기
 			TimerTask timerTask = new TimerTask() {
 				public void run() {
-					user.setCenter(user.getCenter().x,
-                                            (int)(user.getCenter().y - 5)); //5px씩 위로 올라감
+					user.setCenter(user.getCenter().x, (int)(user.getCenter().y - 5)); //5px씩 위로 올라감
 					repaint(); //다시그리기
 					if (TopCheck()) { //위쪽에 장애물이 있을 경우
 						try {
@@ -173,8 +172,8 @@ public class Help_sub extends Canvas implements KeyListener {
 						fall = true; //떨어지는 중으로 설정
 						timer.cancel(); //타이머 취소
 					}
-                                        //초기 위치에서 100 위로 올라갔을 경우
-                                        else if (user.getCenter().y <= userY - 100) {
+                    //초기 위치에서 100 위로 올라갔을 경우
+                    else if (user.getCenter().y <= userY - 100) {
 						try {
 							Thread.sleep(500); //0.5초 멈춤
 						} catch (InterruptedException e) {
@@ -196,13 +195,11 @@ public class Help_sub extends Canvas implements KeyListener {
 			final Timer timer = new Timer(); //타이머 생성
 			TimerTask timerTask = new TimerTask() {
 				public void run() {
-					user.setCenter(user.getCenter().x,
-                                            (int)(user.getCenter().y + 5)); //5px씩 떨어짐
+					user.setCenter(user.getCenter().x, (int)(user.getCenter().y + 5)); //5px씩 떨어짐
 					repaint(); //다시그리기
 					if (bottomCheck()) { //아래쪽에 장애물이 있으면
 						timer.cancel(); //타이머 취소
-                                                //출력
-						System.out.println("bottom: " + bottomCheck()); 
+						System.out.println("bottom: " + bottomCheck()); //출력
 						fall = false; //떨어지는 중이 아님
 					}
 				}
@@ -216,9 +213,8 @@ public class Help_sub extends Canvas implements KeyListener {
  		int k = Math.round(user.getCenter().x / 30); //현재 위치한 블럭 x
  		
  		for (; i < map.length; i++) { //맵을 모두 둘러볼 때까지
- 			if (map[i][k] == 1 || map[i][k] == 3 || map[i][k] == 4 ||
-                            map[i][k] == 5 || map[i][k] == 8) {
- 				//밟을 수 있는 땅이면
+ 			//밟을 수 있는 땅이면
+ 			if (map[i][k] == 1 || map[i][k] == 3 || map[i][k] == 4 || map[i][k] == 5 || map[i][k] == 8) {
  				break; //반복 종료
  			}
  		}
@@ -234,8 +230,7 @@ public class Help_sub extends Canvas implements KeyListener {
  		
  		if (k > 0) {
  			if (i < 20 && i >= 0) {
-	 			if (map[i][k] != 0 && map[i][k] != 2 && map[i][k] != 6 &&
-                                    map[i][k] != 7)  { //장애물이 있을때
+	 			if (map[i][k] != 0 && map[i][k] != 2 && map[i][k] != 6 && map[i][k] != 7)  { //장애물이 있을때
 	 				reboot(i, k); //처음 위치로
 	 				fire(i, k); //불꽃 블럭
 	 				move(i, k); //랜덤 위치로
@@ -258,8 +253,7 @@ public class Help_sub extends Canvas implements KeyListener {
  		
  		if (map[1].length > k) {
  			if (i < 20 && i >= 0) {
- 				if (map[i][k] != 0 && map[i][k] != 2 &&
-                                    map[i][k] != 6 && map[i][k] != 7) { //장애물이 있을때
+ 				if (map[i][k] != 0 && map[i][k] != 2 && map[i][k] != 6 && map[i][k] != 7) { //장애물이 있을때
  					reboot(i, k); //처음 위치로
 	 				fire(i, k); //불꽃 블럭
 	 				move(i, k); //랜덤 위치로
@@ -279,7 +273,7 @@ public class Help_sub extends Canvas implements KeyListener {
  		int k = Math.round(user.getCenter().x / 30); //현재 위치한 블럭 x
  		
 		if (i < 20 && i >= 0) { //화면 안이면
-                        //장애물이 있을 때
+            //장애물이 있을 때
 			if (map[i][k] != 0 && map[i][k] != 2 && map[i][k] != 6 && map[i][k] != 7)  {
 				reboot(i, k); //처음 위치로
  				fire(i, k); //불꽃 블럭
@@ -301,8 +295,8 @@ public class Help_sub extends Canvas implements KeyListener {
  		int k = Math.round(user.getCenter().x / 30); //현재 위치한 블럭 x
  		
 		if (i < 19 && i >= 0) { //화면 안이면
-                        //유저의 아래쪽에 장애물이 있을 때
-			if (map[i][k] != 0 && map[i][k] != 2 && map[i][k] != 6 && map[i][k] != 7)  {
+            //유저의 아래쪽에 장애물이 있을 때
+			if (map[i][k] != 0 && map[i][k] != 2 && map[i][k] != 6 && map[i][k] != 7) {
 				reboot(i, k); //처음 위치로
  				fire(i, k); //불꽃 블럭
  				move(i, k); //랜덤 위치로
@@ -338,10 +332,13 @@ public class Help_sub extends Canvas implements KeyListener {
 	
 	public void clear() { //클리어 시
 		System.out.println("clear"); //출력
+		left = false;
+		right = false;
+		up = false;
+		down = false;
 		String[] answer = {"확인", "다시하기"}; //다이얼로그 버튼 설정
-		int result = JOptionPane.showOptionDialog(this, " * clear * ", //내용, 타이틀 설정
-                    "clear", JOptionPane.YES_NO_CANCEL_OPTION, 
-                    JOptionPane.INFORMATION_MESSAGE, null, answer, null);
+		int result = JOptionPane.showOptionDialog(this, " * clear * ", "clear", JOptionPane.YES_NO_CANCEL_OPTION, 
+        	JOptionPane.INFORMATION_MESSAGE, null, answer, null); //내용, 타이틀 설정
 		if (result == 1) { //다시하기 선택 시
 			pointX = 105;
 			pointY = 285;
@@ -354,14 +351,18 @@ public class Help_sub extends Canvas implements KeyListener {
 	
 	public void over() {
 		System.out.println("game over"); //출력
+		left = false;
+		right = false;
+		up = false;
+		down = false;
 		if (savePoint) { //세이브 포인트가 존재하면
 			String[] answer = {"예", "처음부터"}; //다이얼로그 버튼 설정
-			int choice = JOptionPane.showOptionDialog(this,
-                            " 저장된 위치에서 시작하시겠습니까? ", "game over", //내용, 타이틀 설정
-					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, answer, null);
+			int choice = JOptionPane.showOptionDialog(this, " 저장된 위치에서 시작하시겠습니까? ", "game over",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, answer, null); //내용, 타이틀 설정
 			if (choice == 0) { //세이브 포인트에서 시작 선택 시
 				user.setCenter(pointX, pointY); //세이브 포인트로
-			} else { //아닐 시
+			}
+			else { //아닐 시
 				int index[] = find(7); //세이브 포인트 초기화
 				for (int num = 0; num < index.length; num += 2) {
 					if (index[num] == 0 && index[num + 1] == 0) {
@@ -376,8 +377,8 @@ public class Help_sub extends Canvas implements KeyListener {
 		}
 		else {
 			String[] answer = {"확인", "다시하기"}; //다이얼로그 버튼 설정
-			JOptionPane.showOptionDialog(this, " ~ game over ~ ", //내용, 타이틀 설정
-                            "game over", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, answer, null );
+			JOptionPane.showOptionDialog(this, " ~ game over ~ ", "game over", JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.INFORMATION_MESSAGE, null, answer, null ); //내용, 타이틀 설정
 			if (true) {
 				pointX = 105;
 				pointY = 285;
@@ -422,10 +423,10 @@ public class Help_sub extends Canvas implements KeyListener {
 			int b = (int) (Math.random() * map.length); //현재 위치 
 			int a = (int) (Math.random() * map[1].length - 1);
 			
-			if (map[b][a] != 1 && map[b][a] != 3 && map[b][a] != 4 &&
-                            map[b][a] != 5) { //밟을 수 있는 땅이면
+			if (map[b][a] != 1 && map[b][a] != 3 && map[b][a] != 4 && map[b][a] != 5) { //밟을 수 있는 땅이면
 				user.setCenter(a * 30 + 15, b * 30 + 15); //이동
-			} else {
+			}
+			else {
 				move(i, k); //밟을 수 없는 땅이면 다시 탐색
 			}
 		}

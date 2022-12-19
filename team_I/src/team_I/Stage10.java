@@ -6,12 +6,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-public class Stage5 extends JFrame {
+public class Stage10 extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private Map map = new Map();
-	private Screen screen = new Screen(map.getMap5());
+	private Screen screen = new Screen(map.getMap10());
 	
-	public Stage5() {
+	public Stage10() {
 		this.initial(); //프레임 설정
 	
 		this.add(returnButton()); //돌아가기 버튼

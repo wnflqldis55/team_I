@@ -9,14 +9,13 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Help_p3 extends JFrame {
+public class Help_p4 extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	public Help_p3() {
+	public Help_p4() {
 		this.initial(); //프레임 설정
 		
 		this.add(prevButton()); //이전 버튼
-		this.add(nextButton()); //다음 버튼
 		this.add(returnButton()); //돌아가기 버튼
 		this.add(backGroundImage()); //캔버스 추가
 		
@@ -34,7 +33,7 @@ public class Help_p3 extends JFrame {
 	
 	private JLabel backGroundImage() { //배경 이미지
 		JLabel background = //배경 이미지 라벨에 추가
-                    new JLabel(new ImageIcon(getClass().getClassLoader().getResource("help_p3.png"))); //임시
+                    new JLabel(new ImageIcon(getClass().getClassLoader().getResource("help_p4.png"))); //임시
 		background.setBounds(0, 0, 800, 600); //라벨 위치 지정
 		
 		return background; //라벨 리턴
@@ -46,34 +45,16 @@ public class Help_p3 extends JFrame {
 		JButton prev = new JButton(img); //버튼 생성
 		prev.addActionListener(new ActionListener() { //리스너 등록
 			public void actionPerformed(ActionEvent e) {
-				new Help_p2(); //이전 페이지
+				new Help_p3(); //이전 페이지
 				dispose(); //현재 프레임 안보이게
 			}
 		});
 		LineBorder boader = new LineBorder(new Color(75, 75, 75));
 		prev.setBorder(boader);
 		prev.setPreferredSize(new Dimension(32, 32)); //버튼 크기 지정
-		prev.setBounds(710, 554, 32, 32); //위치 지정
+		prev.setBounds(710, 554, 32, 32); //위치 지정W
 		
 		return prev; //버튼 리턴
-	}
-	
-	private JButton nextButton() {
-		ImageIcon img = new ImageIcon(getClass().getClassLoader().getResource("nextButton.png")); //이미지 생성
-		
-		JButton next = new JButton(img); //버튼 생성
-		next.addActionListener(new ActionListener() { //리스너 등록
-			public void actionPerformed(ActionEvent e) {
-				new Help_p4(); //다음 페이지
-				dispose(); //현재 프레임 안보이게
-			}
-		});
-		LineBorder boader = new LineBorder(new Color(75, 75, 75));
-		next.setBorder(boader);
-		next.setPreferredSize(new Dimension(32, 32)); //버튼 크기 지정
-		next.setBounds(745, 554, 32, 32); //위치 지정W
-		
-		return next; //버튼 리턴
 	}
 	
 	private JButton returnButton() {

@@ -8,8 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class MainFrame extends JFrame implements KeyListener {
+public class MainFrame extends JFrame implements KeyListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 	
 	public MainFrame(boolean bgm) {
@@ -35,20 +37,21 @@ public class MainFrame extends JFrame implements KeyListener {
 		this.setLayout(null); //앱솔루트 레이아웃
 		
 		this.addKeyListener(this); //키보드 리스너
+		this.addMouseListener(this); //마우스 리스너
 		this.requestFocus(); //키이벤트를 받을 컴포넌트로 설정
 		this.setFocusable(true); //키 이벤트 우선 입력
 	}
 	
 	private JLabel backGroundImage() { //배경 이미지
 		JLabel background = //배경 이미지 라벨에 추가
-                    new JLabel(new ImageIcon("resources/mainFrame.png"));
+                    new JLabel(new ImageIcon(getClass().getClassLoader().getResource("mainFrame.png")));
 		background.setBounds(0, 0, 800, 600); //라벨 위치 지정
 		
 		return background; //라벨 리턴
 	}
 
 	private JButton settingButton() {
-		ImageIcon img = new ImageIcon("resources/settingButton.png"); //이미지 생성
+		ImageIcon img = new ImageIcon(getClass().getClassLoader().getResource("settingButton.png")); //이미지 생성
 		
 		JButton settingBotton = new JButton(img); //이미지가 들어간 버튼 생성
 		settingBotton.addActionListener(new ActionListener() { //리스너 등록
@@ -64,7 +67,7 @@ public class MainFrame extends JFrame implements KeyListener {
 	}
 	
 	private JButton helpButton() {
-		ImageIcon img = new ImageIcon("resources/helpButton.png"); //이미지 생성
+		ImageIcon img = new ImageIcon(getClass().getClassLoader().getResource("helpButton.png")); //이미지 생성
 		
 		JButton helpButton = new JButton(img); //이미지가 들어간 버튼 생성
 		helpButton.addActionListener(new ActionListener() { //리스너 등록
@@ -80,7 +83,7 @@ public class MainFrame extends JFrame implements KeyListener {
 	}
 	
 	private JButton exitButton() {
-		ImageIcon img = new ImageIcon("resources/exitButton.png"); //이미지 생성
+		ImageIcon img = new ImageIcon(getClass().getClassLoader().getResource("exitButton.png")); //이미지 생성
 		
 		JButton exitButton = new JButton(img); //이미지가 들어간 버튼 생성
 		exitButton.addActionListener(new ActionListener() { //리스너 등록
@@ -107,6 +110,27 @@ public class MainFrame extends JFrame implements KeyListener {
 	}
 
 	public void keyReleased(KeyEvent e) {
+		
+	}
+
+	public void mouseClicked(MouseEvent e) {
+		new Start();
+		setVisible(false);
+	}
+
+	public void mousePressed(MouseEvent e) {
+		
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		
+	}
+
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+
+	public void mouseExited(MouseEvent e) {
 		
 	}
 }
